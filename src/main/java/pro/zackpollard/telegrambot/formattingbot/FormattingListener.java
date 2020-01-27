@@ -2,6 +2,7 @@ package pro.zackpollard.telegrambot.formattingbot;
 
 import pro.zackpollard.telegrambot.api.TelegramBot;
 import pro.zackpollard.telegrambot.api.chat.inline.send.InlineQueryResponse;
+import pro.zackpollard.telegrambot.api.chat.inline.send.content.InputTextMessageContent;
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResult;
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResultArticle;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
@@ -87,42 +88,58 @@ public class FormattingListener implements Listener {
 
             //This creates a new InlineQueryResultArticle and adds it to the list of results
             queryResults.add(InlineQueryResultArticle.builder()
-                    .parseMode(ParseMode.MARKDOWN)
+                    .inputMessageContent(InputTextMessageContent
+                            .builder()
+                            .messageText(queryText)
+                            .disableWebPagePreview(true)
+                            .parseMode(ParseMode.MARKDOWN)
+                            .build()
+                    )
                     .title("Custom Markdown")
                     .description(event.getQuery().getQuery())
-                    .disableWebPagePreview(true)
-                    .messageText(queryText)
                     .build()
             );
         }
 
         //This creates a new InlineQueryResultArticle and adds it to the list of results
         queryResults.add(InlineQueryResultArticle.builder()
-                .parseMode(ParseMode.MARKDOWN)
+                .inputMessageContent(InputTextMessageContent
+                        .builder()
+                        .parseMode(ParseMode.MARKDOWN)
+                        .messageText("*" + newQueryText + "*")
+                        .disableWebPagePreview(true)
+                        .build()
+                )
                 .title("Bold")
                 .description("*" + event.getQuery().getQuery() + "*")
-                .disableWebPagePreview(true)
-                .messageText("*" + newQueryText + "*")
                 .build()
         );
 
         //This creates a new InlineQueryResultArticle and adds it to the list of results
         queryResults.add(InlineQueryResultArticle.builder()
-                .parseMode(ParseMode.MARKDOWN)
+                .inputMessageContent(InputTextMessageContent
+                        .builder()
+                        .parseMode(ParseMode.MARKDOWN)
+                        .messageText("_" + newQueryText + "_")
+                        .disableWebPagePreview(true)
+                        .build()
+                )
                 .title("Italic")
                 .description("_" + event.getQuery().getQuery() + "_")
-                .disableWebPagePreview(true)
-                .messageText("_" + newQueryText + "_")
                 .build()
         );
 
         //This creates a new InlineQueryResultArticle and adds it to the list of results
         queryResults.add(InlineQueryResultArticle.builder()
-                .parseMode(ParseMode.MARKDOWN)
+                .inputMessageContent(InputTextMessageContent
+                        .builder()
+                        .parseMode(ParseMode.MARKDOWN)
+                        .messageText("`" + newQueryText + "`")
+                        .disableWebPagePreview(true)
+                        .build()
+                )
                 .title("Code Formatting")
                 .description("`" + event.getQuery().getQuery() + "`")
-                .disableWebPagePreview(true)
-                .messageText("`" + newQueryText + "`")
                 .build()
         );
 
@@ -132,8 +149,8 @@ public class FormattingListener implements Listener {
         //will not be cached by telegrams servers, you can change the time accordingly
         event.getQuery().answer(telegramBot, InlineQueryResponse.builder()
                 .results(queryResults)
-                .is_personal(false)
-                .cache_time(0)
+                .isPersonal(false)
+                .cacheTime(0)
                 .build()
         );
     }
